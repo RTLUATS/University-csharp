@@ -3,213 +3,188 @@ using System.Collections.Generic;
 
 namespace ConsoleApp1
 {
+    delegate void Deleg(List<Airplane> airplanes, List<Flight> flights);
     class Program
     {
         static void Main(string[] args)
         {
+            Go();
+        }
+
+        private static void Go()
+        {
             ReadFromFile read = new ReadFromFile();
-            
+
             List<Airplane> airplaneList = new List<Airplane>();
             List<Flight> flightList = new List<Flight>();
 
             read.ReadFromAirplane(airplaneList);
             read.ReadFromFlight(flightList);
-           
+
+            Deleg add = (x, y) => StartWatching(x, y);
+
+            add(airplaneList, flightList);
+
             Start(airplaneList, flightList);
-           
         }
 
-        static private void Start(List<Airplane> airplanes, List<Flight> flights)
+        private static void StartWatching(List<Airplane> airplanes, List<Flight> flights)
         {
-
             foreach (var f in flights)
             {
-                foreach(var a in airplanes)
+                foreach (var a in airplanes)
                 {
-                    if ( f.typeAirplane == a.typeAirplane)
+                    if (f.typeAirplane == a.typeAirplane)
                     {
                         a.AddObserver(f);
                     }
                 }
             }
+        }
 
-            Menu();
+        private static void Start(List<Airplane> airplanes, List<Flight> flights)
+        {
+            bool exitFlag = false;
+
+            while (!exitFlag)
+            {
+                Menu();
+                Parse(out int x);
+
+                if (x == 1)
+                {
+                    Change(airplanes);
+                    exitFlag = true;
+                }
+                else
+                    Console.WriteLine("Такого пункта нет");
+            }
+        }
+
+        private static void Change(List<Airplane> airplanes)
+        {
+            Console.WriteLine("Вы хотите изменить цены на билет у конкретного самолёта?(Да = 1/Нет = 2)");
+
+            ParseYesNo(airplanes);
+        }
+
+        private static void ParseYesNo(List<Airplane> airplanes)
+        {
+            bool exitFlag = false;
+
+            while (!exitFlag)
+            {
+                Parse(out int x);
+
+                if (x == 1)
+                {
+                    exitFlag = true;
+                    DialogWithType(airplanes);
+                }
+                else if (x == 2)
+                {
+                    exitFlag = true;
+                    ChooseTiket (airplanes);
+                }
+                else
+                    Console.WriteLine("This point do not exist!");
+            }
+        }
+
+        private static void DialogWithType(List<Airplane> airplanes)
+        {
+            bool exitFlag = false;
+
+            while (!exitFlag)
+            {
+                Console.Write("Enter aircraft id number:");
+
+                Parse(out int x);
+
+                foreach (var plane in airplanes)
+                {
+                    if (plane.id == x)
+                    {
+                        ChooseTiket(airplanes, plane.typeAirplane);
+                        exitFlag = true;
+                    }
+                }
+            }
+        }
+
+        private static void ChooseTiket(List<Airplane> airplanes,string type = "")
+        {
+            bool exitFlag = false;
+            while (!exitFlag)
+            {
+                Console.WriteLine("On which ticket do we increase the price (1 - econom | 2 - bisness| 3 - first class)?");
+
+                Parse(out int x);
+
+                if (x == 1 || x == 2 || x == 3)
+                {
+                    IncreasePrise(type, airplanes, x);
+                    exitFlag = true;
+                }
+                else Console.WriteLine("Try again");
+            }
+        }
+
+        private static void IncreasePrise(string typeAirplane, List<Airplane> airplanes, int typeTicket)
+        {
+            Console.WriteLine("how much do we increase the price ? ");
+
             Parse(out int x);
 
-            switch (x)
-            {
-                case 1: Change(airplanes, flights);
-                    break;
-                default: Console.WriteLine("Такого пункта нет");
-                    break;
-            }
-
+            if (typeAirplane == "")
+                IncreasePriseToAll(airplanes, typeTicket, x);
+            else
+                IncreasePriseToSpecific(typeAirplane, airplanes, typeTicket, x);
         }
-
-        static private void Change(List<Airplane> airplanes, List<Flight> flights)
+             
+        private static void IncreasePriseToSpecific(string typeAirplane, List<Airplane> airplanes, int typeTicket, int addPrise )
         {
-
-            Console.WriteLine("Вы хотите изменить цены на билет у конкретного самолёта?(Да/Нет)");
-
-            Parse(out string x);
-
-            Branching(x, airplanes, flights);
-            
-        }
-
-        static private void Branching(string x, List<Airplane> airplanes, List<Flight> flights)
-        {
-
-            var count = 0;
-
-            if(x == "Да")
+            foreach (var plane in airplanes)
             {
-                while (count == 0)
+                if (plane.typeAirplane.Equals(typeAirplane))
                 {
-
-                    Console.WriteLine("Введите тип самолёта:");
-
-                    string typePlane = Console.ReadLine();
-
-                    foreach (var air in airplanes)
-                    {
-                        if (air.typeAirplane == typePlane)
-                        {
-                            count++;
-                            Console.WriteLine("Введите название билета который вы хотите изменить(эконом/бизнесс/первый)");
-                            
-                            Tiket(airplanes, flights, typePlane);
-                        }
-
-                    }
-                    if (count == 0) Console.WriteLine("Такого самолёта нет!Введите ещё раз");
-                    
+                    plane.prise[typeTicket - 1] += addPrise;
+                    plane.NotifyObservers(plane);
                 }
             }
-            else
-            {
-                Console.WriteLine("Введите название билета который вы хотите изменить(эконом/бизнесс/первый)");
-                
-                Tiket( airplanes, flights);
-            }
-
         }
 
-        static private void Tiket(List<Airplane> airplanes, List<Flight> flights, string typePlane = "-1")
+        private static void IncreasePriseToAll(List<Airplane> airplanes, int typeTicket, int addPrise)
         {
             int oldPrise = 0, newPrise = 0;
-            bool exitFlag = false;
-            string tiket = "";
 
-            while (!exitFlag)
+            foreach (var plane in airplanes)
             {
-                tiket = Console.ReadLine();
-
-                if (tiket == "эконом" || tiket == "бизнесс" || tiket == "первый")
-                    exitFlag = true;
-                else
-                    Console.WriteLine("Введите ещё раз");
-                
+                oldPrise += plane.prise[typeTicket - 1];
+                newPrise += plane.prise[typeTicket - 1] + addPrise;
+                plane.prise[typeTicket - 1] += addPrise;
             }
 
-            Console.WriteLine("Введите на сколько $ увеличится цена");
-           
-            Parse(out int priseNew);
+            var procent = (newPrise - oldPrise / oldPrise) * 100;
 
-            if(typePlane == "-1")
+            if (procent >= 15)
             {
-
-                foreach (var plane in airplanes)
-                {
-                    if (tiket == "эконом")
-                    {
-                        oldPrise += plane.prise[0];
-                        newPrise += plane.prise[0] + priseNew;
-                        
-                        plane.ChangePrise(plane, tiket, newPrise);
-                    }
-                    else if (tiket == "бизнесс")
-                    {
-                        oldPrise += plane.prise[1];
-                        newPrise += plane.prise[1] + priseNew;
-                        
-                        plane.ChangePrise(plane, tiket, priseNew);
-                    }
-                    else
-                    {
-                        oldPrise += plane.prise[2];
-                        newPrise += plane.prise[2] + priseNew;
-
-                        plane.ChangePrise(plane, tiket, priseNew);
-                    }
-
-                }
-
-                var procent = (newPrise - oldPrise / oldPrise) * 100;
-
-                if (procent >= 15)
-                {
-                    foreach (var a in airplanes) a.NotifyObservers(a);   
-                }
-
+                foreach (var a in airplanes) a.NotifyObservers(a);
             }
-            else
-            {
-                foreach (var plane in airplanes)
-                {
-                    if (tiket == "эконом" && plane.typeAirplane == typePlane)
-                    {
-                        plane.ChangePrise(plane, tiket, priseNew,1);
-                    }
-                    else if (tiket == "бизнесс" && plane.typeAirplane == typePlane)
-                    {
-                        plane.ChangePrise(plane, tiket, priseNew,1);
-                    }
-                    else if(plane.typeAirplane == typePlane)
-                    {
-                        plane.ChangePrise(plane, tiket, priseNew,1);
-                    }
-                }
-
-            }
-
         }
 
-        static private void Menu()
+        private static void Menu()
         {
-            Console.WriteLine("1. Bla\n\t Bla: ");
+            Console.WriteLine("1. Change the price of tikets for an airplanes\n\t Write specific point: ");
         }
-
-        static private void Parse(out string x)
-        {
-            x = "";
-            bool exitFlag = false;
-
-
-            while (!exitFlag)
-            {
-                x = Console.ReadLine();
-
-                if (x == "Да" || x == "Нет") 
-                {
-                    exitFlag = true;
-                }
-                else
-                {
-                    Console.WriteLine("Ошибка ввода");
-                }
-            }
-
-        }
-
-
-        static private void Parse(out int x)
+        
+        private static void Parse(out int x)
         {
             x = 0;
 
             while (!int.TryParse(Console.ReadLine(), out x))
             {
-                Console.WriteLine("Введите ещё раз!");
+                Console.WriteLine("Error! Enter again");
             }
 
         }

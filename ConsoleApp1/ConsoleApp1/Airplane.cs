@@ -18,42 +18,6 @@ namespace ConsoleApp1
             prise = new int[3];
         }
 
-        public void ChangePrise(Airplane airplane, string tiket, int priseNew , int key = 0)
-        {
-            if (key == 0)
-            {
-
-                if (tiket == "эконом")
-                {
-                    prise[0] += priseNew; 
-                }
-                else if (tiket == "бизнесс")
-                {
-                    prise[1] += priseNew;
-                }
-                else
-                {
-                    prise[2] += priseNew;
-                }
-            }
-            else
-            {
-                if (tiket == "эконом")
-                {
-                    prise[0] += priseNew;
-                }
-                else if (tiket == "бизнесс")
-                {
-                    prise[1] += priseNew;
-                }
-                else
-                {
-                    prise[2] += priseNew;
-                }
-                NotifyObservers(airplane);
-            }
-        }
-
         public void AddObserver(IObserver observer)
         {
             observers.Add(observer);
