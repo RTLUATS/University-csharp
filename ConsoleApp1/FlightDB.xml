@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
   <Airplane id = "0">
-    <Destination>Киев</Destination>
+    <Destination>Kiev</Destination>
     <Number>182</Number>
-    <Type>Боинг-787</Type>
+    <Type>Boing-787</Type>
     <Time>11:35</Time>
     <Date>25.03.08</Date>
     <EconomClass>210</EconomClass>
@@ -11,9 +11,9 @@
     <FirstClass>300</FirstClass>
   </Airplane>
   <Airplane id = "1">
-    <Destination>Киев</Destination>
+    <Destination>Kiev</Destination>
     <Number>203</Number>
-    <Type>Ил-86</Type>
+    <Type>Il-86</Type>
     <Time>02:00</Time>
     <Date>28.03.08</Date>
     <EconomClass>189</EconomClass>
@@ -21,9 +21,9 @@
     <FirstClass>300</FirstClass>
   </Airplane>
   <Airplane id = "2">
-    <Destination>Москва</Destination>
+    <Destination>Moscow</Destination>
     <Number>189</Number>
-    <Type>Боинг-787</Type>
+    <Type>Boing-787</Type>
     <Time>11:35</Time>
     <Date>25.03.08</Date>
     <EconomClass>210</EconomClass>
@@ -31,9 +31,9 @@
     <FirstClass>300</FirstClass>
   </Airplane>
   <Airplane id = "3">
-    <Destination>Москва</Destination>
+    <Destination>Moscow</Destination>
     <Number>201</Number>
-    <Type>Ту-156</Type>
+    <Type>Ty-156</Type>
     <Time>02:00</Time>
     <Date>25.03.08</Date>
     <EconomClass>189</EconomClass>

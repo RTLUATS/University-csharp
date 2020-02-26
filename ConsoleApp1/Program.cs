@@ -36,7 +36,7 @@ namespace ConsoleApp1
                 {
                     if (f.typeAirplane == a.typeAirplane)
                     {
-                        a.AddObserver(f);
+                        a.AddObserver(f.GetNameHandler());
                     }
                 }
             }
@@ -48,6 +48,9 @@ namespace ConsoleApp1
 
             while (!exitFlag)
             {
+
+                foreach (var f in flights) f.Show();
+                
                 Menu();
                 Parse(out int x);
 
@@ -57,13 +60,14 @@ namespace ConsoleApp1
                     exitFlag = true;
                 }
                 else
-                    Console.WriteLine("Такого пункта нет");
+                    Console.WriteLine("Try Again");
             }
+            foreach (var f in flights) f.Show();
         }
 
         private static void Change(List<Airplane> airplanes)
         {
-            Console.WriteLine("Вы хотите изменить цены на билет у конкретного самолёта?(Да = 1/Нет = 2)");
+            Console.WriteLine("Do you want to change the price of a particular aircraft ? (Yes = 1/No = 2)");
 
             ParseYesNo(airplanes);
         }
@@ -97,8 +101,10 @@ namespace ConsoleApp1
 
             while (!exitFlag)
             {
+                
+                foreach (var a in airplanes) Console.Write($"\nType:{a.typeAirplane} Id:{a.id} ");
                 Console.Write("Enter aircraft id number:");
-
+                
                 Parse(out int x);
 
                 foreach (var plane in airplanes)
@@ -146,10 +152,10 @@ namespace ConsoleApp1
         {
             foreach (var plane in airplanes)
             {
-                if (plane.typeAirplane.Equals(typeAirplane))
+                if (plane.typeAirplane == typeAirplane)
                 {
                     plane.prise[typeTicket - 1] += addPrise;
-                    plane.NotifyObservers(plane);
+                    plane.Notify(plane);
                 }
             }
         }
@@ -169,7 +175,7 @@ namespace ConsoleApp1
 
             if (procent >= 15)
             {
-                foreach (var a in airplanes) a.NotifyObservers(a);
+                foreach (var a in airplanes) a.Notify(a);
             }
         }
 

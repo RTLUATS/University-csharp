@@ -1,19 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<root>
+﻿<root>
   <Airplane id = "0">
-    <Type>Боинг-787</Type>
+    <Type>Boing-787</Type>
     <EconomClass>210</EconomClass>
     <BisnessClass>250</BisnessClass>
     <FirstClass>300</FirstClass>
   </Airplane>
   <Airplane id = "1">
-    <Type>Ил-86</Type>
+    <Type>Il-86</Type>
     <EconomClass>189</EconomClass>
     <BisnessClass>230</BisnessClass>
     <FirstClass>300</FirstClass>
   </Airplane>
   <Airplane id = "2">
-    <Type>Ту-156</Type>
+    <Type>Ty-156</Type>
     <EconomClass>189</EconomClass>
     <BisnessClass>230</BisnessClass>
     <FirstClass>300</FirstClass>

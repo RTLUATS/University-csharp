@@ -21,11 +21,13 @@ namespace ConsoleApp1
                 if (idAir != null)
                     airplanes[index].id = Convert.ToInt32(idAir.Value);
 
-                foreach (XmlNode child in doc.ChildNodes)
+                foreach (XmlNode child in node.ChildNodes)
                 {
                     BranchingA(child, index ,airplanes);
                     
                 }
+
+                index++;
             }
 
         }
@@ -67,11 +69,13 @@ namespace ConsoleApp1
                 if (idFl != null)
                     flights[index].id = Convert.ToInt32(idFl.Value);
 
-                foreach (XmlNode child in doc.ChildNodes)
+                foreach (XmlNode child in node.ChildNodes)
                 {
                     BranchingB(child, index, flights);
 
                 }
+
+                index++;
             }
         }
 
